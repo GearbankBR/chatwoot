@@ -37,12 +37,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract version from Dockerfile name
+      - name: Extract version and repo name
         id: extract_version
         run: |
           version="${{ matrix.dockerfile }}"
-          version="${version#Dockerfile.}" # Remove "Dockerfile." prefix if it exists
+          version="${version#Dockerfile.}"
+          repo="${{ github.repository }}"
           echo "version=${version}" >> $GITHUB_OUTPUT
+          echo "repo=${repo,,}" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Build and Publish
@@ -51,4 +53,4 @@ jobs:
           file: ${{ matrix.dockerfile }}
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ steps.extract_version.outputs.version }}
+          tags: ghcr.io/${{ steps.extract_version.outputs.repo }}:${{ steps.extract_version.outputs.version }}
