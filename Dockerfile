@@ -1,1 +1,1 @@
-FROM ghcr.io/railwayapp-templates/chatwoot:Community
+FROM ghcr.io/gearbankbr/chatwoot:Community
